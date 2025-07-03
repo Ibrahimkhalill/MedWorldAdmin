@@ -1,38 +1,44 @@
-import { BrowserRouter, Route, Routes, Navigate } from "react-router-dom";
+import React from 'react';
+import { Routes, Route, BrowserRouter, Navigate } from 'react-router-dom';
+import { useAuth } from './component/AuthContexts';
+import Login from './authentication/Login';
+import './App.css';
+import Home from './page/Homes';
+import User from './page/User';
+import PrivacyPolicy from './page/PrivacyPolicys';
 
-import Login from "./authentication/Login";
-import Home from "./page/Home";
-import "./App.css";
-import TermsAndConditions from "./page/TermsConditions";
-import PrivacyPolicy from "./page/PrivacyPolicy";
-import { useAuth } from "./component/AuthContext";
-import NotFound from "./page/NotFound";
+function App() {
+	return (
+		<BrowserRouter>
+			<Routes>
+				{/* Protected Login Route to prevent logged in users from accessing the login page */}
+				<Route
+					path="/login"
+					element={<ProtectedLoginRoute component={<Login />} />}
+				/>
+				<Route path="/privacy-policy" element={<PrivacyPolicy />} />
+				{/* Protected Routes */}
+				<Route path="/" element={<ProtectedRoute component={<Home />} />} />
+				<Route path="/user" element={<ProtectedRoute component={<User />} />} />
+			</Routes>
+		</BrowserRouter>
+	);
+}
 
-const App = () => {
-  return (
-    <BrowserRouter>
-      <Routes>
-        <Route path="*" element={<NotFound />} />
-        <Route path="/" element={<Login />} />
+// ProtectedRoute component to handle private routes
+const ProtectedRoute = ({ component }) => {
+	const { isAuthenticated } = useAuth(); // useAuth is used to check if the user is authenticated
 
-        <Route path="/home" element={<ProtectedRoute component={<Home />} />} />
-        <Route
-          path="/terms-conditions"
-          element={<ProtectedRoute component={<TermsAndConditions />} />}
-        />
-        <Route
-          path="/privacy-policy"
-          element={<ProtectedRoute component={<PrivacyPolicy />} />}
-        />
-      </Routes>
-    </BrowserRouter>
-  );
+	// If the user is authenticated, return the component, else redirect to login page
+	return isAuthenticated ? component : <Navigate to="/login" replace />;
 };
 
-const ProtectedRoute = ({ component }) => {
-  const { isAuthenticated } = useAuth();
+// ProtectedLoginRoute to prevent logged in users from accessing the login page
+const ProtectedLoginRoute = ({ component }) => {
+	const { isAuthenticated } = useAuth();
 
-  return isAuthenticated ? component : <Navigate to="/" replace />;
+	// If the user is logged in, redirect them to the home page or another protected page
+	return isAuthenticated ? <Navigate to="/" replace /> : component;
 };
 
 export default App;

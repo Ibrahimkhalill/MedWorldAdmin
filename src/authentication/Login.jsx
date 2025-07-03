@@ -3,7 +3,7 @@ import MEdLOGO from "../assets/MED_LOGO.svg";
 import { IoEyeOffOutline } from "react-icons/io5";
 import { IoEyeOutline } from "react-icons/io5";
 import axiosInstance from "../component/axiosInstance";
-import { useAuth } from "../component/AuthContext";
+import { useAuth } from "../component/AuthContexts";
 import { BiSolidError } from "react-icons/bi";
 import { IoMdClose } from "react-icons/io";
 import { useNavigate } from "react-router-dom";
@@ -156,11 +156,10 @@ const Login = () => {
                 type="email"
                 id="email"
                 placeholder="medworld@gmail.com"
-                className={`${
-                  errors.userName
+                className={`${errors.userName
                     ? "border px-1 border-red-700 "
                     : "px-1 focus:ring-yellow-500 focus:outline-none focus:ring-2"
-                } w-full p-3 border outline-none rounded-[4px]  `}
+                  } w-full p-3 border outline-none rounded-[4px]  `}
                 onChange={handleUserNameChange}
               />
               <div className="absolute top-[72px] left-0 text-[red] text-sm">
@@ -178,11 +177,10 @@ const Login = () => {
                 type={passwordVisible ? "text" : "password"}
                 id="password"
                 placeholder="********"
-                className={`${
-                  errors.password
+                className={`${errors.password
                     ? "border px-1 border-red-700 "
                     : "px-1 focus:ring-yellow-500 focus:outline-none focus:ring-2"
-                } w-full p-3 border outline-none rounded-[4px]  `}
+                  } w-full p-3 border outline-none rounded-[4px]  `}
                 onChange={handlePasswordChange}
               />
               <button
